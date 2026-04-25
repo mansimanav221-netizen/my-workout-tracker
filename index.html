@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Workout Plan 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --menstrual: #c0392b;
+    --follicular: #27ae60;
+    --ovulation: #e67e22;
+    --luteal-early: #8e44ad;
+    --luteal-late: #2980b9;
+    --bg: #faf8f5;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --muted: #aaa;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 20px 16px 80px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+/* Header */
+.header { text-align: center; margin-bottom: 20px; }
+.header h1 { font-family: ‘DM Serif Display’, serif; font-size: 1.8rem; letter-spacing: -0.5px; margin-bottom: 3px; }
+.header p { font-size: 0.78rem; color: var(–muted); }
+
+/* Cards */
+.card {
+background: var(–card); border-radius: var(–radius);
+padding: 16px 18px; margin-bottom: 12px;
+box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+.card-label {
+font-size: 0.7rem; font-weight: 700;
+text-transform: uppercase; letter-spacing: 1px;
+color: var(–muted); margin-bottom: 10px;
+}
+
+/* Today banner */
+.today-banner {
+border-radius: var(–radius); padding: 16px 18px;
+margin-bottom: 12px; color: white;
+box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+.today-banner .tb-top {
+display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;
+}
+.today-banner .tb-date { font-size: 0.78rem; opacity: 0.85; font-weight: 500; }
+.today-banner .tb-phase {
+font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+letter-spacing: 0.8px; background: rgba(255,255,255,0.2);
+padding: 3px 10px; border-radius: 99px;
+}
+.today-banner .tb-day { font-family: ‘DM Serif Display’, serif; font-size: 2rem; line-height: 1; margin-bottom: 2px; }
+.today-banner .tb-sub { font-size: 0.78rem; opacity: 0.8; }
+.today-banner .tb-msg { font-size: 0.82rem; opacity: 0.9; margin-top: 8px; line-height: 1.5; font-style: italic; }
+
+/* Stats row */
+.stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.stat-card {
+background: var(–card); border-radius: 14px;
+padding: 14px 10px; text-align: center;
+box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+.stat-icon { font-size: 1.4rem; margin-bottom: 4px; }
+.stat-val { font-family: ‘DM Serif Display’, serif; font-size: 1.5rem; line-height: 1; margin-bottom: 2px; }
+.stat-lbl { font-size: 0.65rem; color: var(–muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* Progress */
+.progress-row { display: flex; justify-content: space-between; margin-bottom: 7px; }
+.progress-count { font-size: 0.76rem; font-weight: 700; color: #27ae60; }
+.bar-bg { background: #f0f0f0; border-radius: 99px; height: 7px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg,#27ae60,#2ecc71); transition: width 0.4s ease; }
+
+/* Calendar grid */
+.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 5px; }
+.cal-header-row { display: grid; grid-template-columns: repeat(7,1fr); gap: 5px; margin-bottom: 4px; }
+.cal-header-cell { text-align: center; font-size: 0.62rem; font-weight: 700; color: var(–muted); text-transform: uppercase; }
+.cal-cell {
+aspect-ratio: 1; border-radius: 10px;
+border: 1.5px solid #efefef; background: transparent;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 0.72rem; font-weight: 500;
+cursor: pointer; color: var(–text);
+transition: all 0.15s;
+display: flex; flex-direction: column;
+align-items: center; justify-content: center;
+position: relative; padding: 2px;
+line-height: 1.2;
+}
+.cal-cell:active { transform: scale(0.93); }
+.cal-cell.empty { border-color: transparent; background: transparent; cursor: default; }
+.cal-cell.has-phase { color: white; border-color: transparent; }
+.cal-cell.selected { box-shadow: 0 0 0 2.5px white, 0 0 0 4.5px currentColor; }
+.cal-cell.is-today { font-weight: 800; }
+.cal-cell.done-day::after {
+content: ‘✓’;
+position: absolute; top: 1px; right: 2px;
+font-size: 8px; font-weight: 900; opacity: 0.9;
+}
+.cal-cell .cell-day { font-size: 0.78rem; font-weight: 600; }
+.cal-cell .cell-cycle { font-size: 0.55rem; opacity: 0.85; }
+
+/* Today button */
+.btn-today {
+width: 100%; padding: 10px;
+border: 2px solid #e8e8e8; border-radius: 10px;
+background: transparent; font-family: ‘DM Sans’, sans-serif;
+font-size: 0.82rem; font-weight: 700; color: #666;
+cursor: pointer; margin-top: 10px;
+transition: all 0.15s;
+}
+.btn-today:active { background: #f5f5f5; }
+
+/* Detail card */
+.detail-card {
+background: var(–card); border-radius: var(–radius);
+padding: 20px 18px; margin-bottom: 12px;
+box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+border-left: 5px solid #ccc;
+}
+.detail-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+.detail-daynum { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(–muted); }
+.detail-caldate { font-size: 0.72rem; color: var(–muted); font-weight: 500; }
+.phase-badge {
+display: inline-flex; align-items: center;
+padding: 4px 12px; border-radius: 99px;
+font-size: 0.7rem; font-weight: 700;
+text-transform: uppercase; letter-spacing: 0.8px;
+color: white; margin-bottom: 12px;
+}
+.done-banner {
+display: flex; align-items: center; gap: 8px;
+background: #eafaf1; border: 1px solid #a9dfbf;
+border-radius: 10px; padding: 8px 12px;
+font-size: 0.8rem; font-weight: 600; color: #1e8449;
+margin-bottom: 12px;
+}
+.hydrate-warning {
+display: flex; align-items: center; gap: 8px;
+background: #fff8e1; border: 1px solid #f9ca24;
+border-radius: 10px; padding: 8px 12px;
+font-size: 0.78rem; font-weight: 600; color: #b7770d;
+margin-bottom: 12px;
+}
+
+/* Workouts */
+.workout-title { font-weight: 700; font-size: 1rem; margin-bottom: 8px; }
+.workout-row { display: flex; align-items: flex-start; gap: 10px; padding: 11px 0; border-bottom: 1px solid #f3f3f3; }
+.workout-row:last-of-type { border-bottom: none; }
+.wo-icon { width: 36px; height: 36px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #f7f7f7; border-radius: 9px; font-size: 1.2rem; }
+.wo-info { flex: 1; }
+.wo-name { font-weight: 600; font-size: 0.88rem; margin-bottom: 2px; }
+.wo-detail { font-size: 0.74rem; color: var(–muted); margin-bottom: 6px; }
+.wo-link { display: inline-flex; align-items: center; gap: 4px; font-size: 0.73rem; font-weight: 700; padding: 5px 12px; border-radius: 7px; color: white; text-decoration: none; }
+.weight-badge { display: inline-block; padding: 2px 7px; border-radius: 99px; font-size: 0.65rem; font-weight: 700; margin-left: 6px; vertical-align: middle; }
+.w1 { background: #ffeaea; color: #c0392b; }
+.w2 { background: #eafaf1; color: #27ae60; }
+
+/* Tip */
+.tip-box { border-radius: 10px; padding: 11px 13px; margin-top: 12px; font-size: 0.79rem; line-height: 1.65; color: #444; }
+
+/* Rest */
+.rest-wrap { text-align: center; padding: 20px 0; }
+.rest-icon { font-size: 2.5rem; margin-bottom: 8px; }
+.rest-title { font-family: ‘DM Serif Display’, serif; font-size: 1.2rem; margin-bottom: 6px; }
+.rest-note { font-size: 0.8rem; line-height: 1.7; color: #777; }
+
+/* Done button */
+.btn-done {
+width: 100%; margin-top: 14px; padding: 13px;
+border: none; border-radius: 11px;
+font-family: ‘DM Sans’, sans-serif; font-size: 0.9rem; font-weight: 700;
+cursor: pointer; transition: all 0.18s;
+display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-done.mark { background: #2ecc71; color: white; }
+.btn-done.mark:active { background: #27ae60; transform: scale(0.98); }
+.btn-done.unmark { background: #f0f0f0; color: #888; }
+.btn-done.unmark:active { transform: scale(0.98); }
+
+/* New cycle button */
+.btn-new-cycle {
+width: 100%; padding: 13px;
+border: 2px dashed #e0e0e0; border-radius: 11px;
+background: transparent; font-family: ‘DM Sans’, sans-serif;
+font-size: 0.85rem; font-weight: 700; color: #999;
+cursor: pointer; margin-bottom: 12px;
+transition: all 0.15s;
+}
+.btn-new-cycle:active { background: #f5f5f5; }
+
+/* Legend */
+.legend { display: flex; flex-wrap: wrap; gap: 5px 12px; margin-top: 10px; }
+.legend-item { display: flex; align-items: center; gap: 4px; font-size: 0.68rem; color: #999; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+/* Safety */
+.safety { text-align: center; font-size: 0.72rem; color: var(–muted); line-height: 1.8; margin-top: 8px; }
+.safety strong { color: #e74c3c; }
+
+/* Setup screen */
+.setup-screen {
+display: flex; flex-direction: column; align-items: center;
+justify-content: center; min-height: 80vh; text-align: center; padding: 20px;
+}
+.setup-screen h2 { font-family: ‘DM Serif Display’, serif; font-size: 1.6rem; margin-bottom: 8px; }
+.setup-screen p { font-size: 0.84rem; color: #777; line-height: 1.6; margin-bottom: 24px; }
+.setup-screen input[type=“date”] {
+width: 100%; padding: 14px; border: 2px solid #e8e8e8;
+border-radius: 12px; font-family: ‘DM Sans’, sans-serif;
+font-size: 1rem; margin-bottom: 12px; color: var(–text);
+background: white;
+}
+.setup-screen input[type=“date”]:focus { outline: none; border-color: #27ae60; }
+.btn-start {
+width: 100%; padding: 14px; border: none; border-radius: 12px;
+background: #27ae60; color: white;
+font-family: ‘DM Sans’, sans-serif; font-size: 1rem; font-weight: 700;
+cursor: pointer;
+}
+.btn-start:active { background: #219a52; }
+</style>
+
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+// ── Constants ─────────────────────────────────────────────────────────────
+const STORAGE = {
+  CYCLE_START: "wt_cycleStart_v2",
+  DONE:        "wt_done_v2",
+  STREAKS:     "wt_streaks_v2",
+  HISTORY:     "wt_history_v2",
+};
+
+const PHASES = {
+  menstrual:   { label:"Menstruation",  color:"#c0392b", light:"#fdecea" },
+  follicular:  { label:"Follicular",    color:"#27ae60", light:"#eafaf1" },
+  ovulation:   { label:"Ovulation",     color:"#e67e22", light:"#fef5ec" },
+  lutealEarly: { label:"Early Luteal",  color:"#8e44ad", light:"#f5eef8" },
+  lutealLate:  { label:"Late Luteal",   color:"#2980b9", light:"#eaf4fb" },
+};
+const PHASE_ORDER = ["menstrual","follicular","ovulation","lutealEarly","lutealLate"];
+const PHASE_LABELS = { menstrual:"Menstruation (1–3)", follicular:"Follicular (4–12)", ovulation:"Ovulation (13–15)", lutealEarly:"Early Luteal (16–21)", lutealLate:"Late Luteal (22–30)" };
+
+const DAYS_OF_WEEK = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+function getPhase(d) {
+  if (d<=3)  return "menstrual";
+  if (d<=12) return "follicular";
+  if (d<=15) return "ovulation";
+  if (d<=21) return "lutealEarly";
+  return "lutealLate";
+}
+
+const PHASE_MESSAGES = {
+  menstrual:   ["Rest, hydrate, and be kind to yourself 🌸", "Your body is doing real work right now.", "Gentle movement only — you're doing great."],
+  follicular:  ["Energy rising — let's go! 💪", "Your strongest weeks are here.", "Build momentum, one day at a time."],
+  ovulation:   ["Peak power window — make it count! ⚡", "You're at your strongest right now.", "Push a little harder today — you've got it."],
+  lutealEarly: ["Still strong, listen to your body. 🌿", "Solid effort, ease in if needed.", "You're doing amazing — keep it consistent."],
+  lutealLate:  ["Gentle and consistent wins this week. 💙", "Be kind to yourself — you're almost there.", "Rest is productive. Keep showing up."],
+};
+
+// ── Workout data ──────────────────────────────────────────────────────────
+const ARMS   = { icon:"💪", name:"Standing Arm Workout",  detail:"15 min · fitbymik",      link:"https://youtu.be/60LRBIEiT6s" };
+const ABS    = { icon:"🔥", name:"Standing Abs Workout",  detail:"10 min · fitbymik",       link:"https://youtu.be/KVt_uBX-XQw" };
+const W15    = { icon:"🚶", name:"15-Min Walk at Home",   detail:"Leslie Sansone",          link:"https://youtu.be/C_rKOIJTB6A" };
+const W30    = { icon:"🚶", name:"30-Min Walk at Home",   detail:"2 miles · Walk at Home",  link:"https://youtu.be/AEREJOT_Mpc" };
+const wo = (w,kg) => ({...w,weight:kg});
+
+const SCHED = {
+  1:{type:"rest",note:"Day 1 — full rest. Your body is working hard. Hydrate, stay comfortable, be kind to yourself."},
+  2:{type:"rest",note:"Day 2 — rest or a gentle 5-min stretch if you feel up to it. No pressure."},
+  3:{workouts:[wo(W15,null)],tip:"Last period day — a slow easy walk is plenty. No weights today. Tomorrow the real work begins!"},
+  4:{workouts:[wo(ARMS,"2kg"),wo(ABS,"2kg")],tip:"Welcome to follicular phase — energy is rising! Arms + abs back to back for a strong 25-min session."},
+  5:{workouts:[wo(W30,null)],tip:"Cardio day. Aim for a steady brisk pace the whole way through. You've got the stamina for it."},
+  6:{workouts:[wo(ARMS,"2kg")],tip:"Arms only. Try slowing each rep: 3 counts down, 1 up — makes 2kg feel much harder."},
+  7:{type:"rest",note:"Rest day. Muscles grow during recovery — this is just as important as the workout."},
+  8:{workouts:[wo(ARMS,"2kg"),wo(ABS,"2kg")],tip:"Arms + Abs combo. At the end of each move, add 5 small pulse reps to fully burn out the muscle."},
+  9:{workouts:[wo(W30,null)],tip:"Energy is building week on week. Push for the full 30 mins."},
+  10:{workouts:[wo(ARMS,"2kg")],tip:"Slow reps — 4 counts down, 1 up. Minimal rest between sets. Make the 2kg work for you."},
+  11:{workouts:[wo(W15,null)],tip:"Lighter cardio day. Follow the walk with 5 mins of shoulder rolls and ankle circles."},
+  12:{workouts:[wo(ARMS,"2kg"),wo(ABS,"2kg")],tip:"Last follicular day — give it everything. Slow reps, pulses, cut rest to 10 sec."},
+  13:{workouts:[wo(W30,null)],tip:"Peak energy starts NOW. Walk faster than you think you can. This is your power window."},
+  14:{workouts:[wo(ARMS,"2kg"),wo(ABS,"2kg")],tip:"Your strongest workout day of the month. Slow reps + pulses + only 10 sec rest. Push the 2kg to its limit."},
+  15:{workouts:[wo(W30,null)],tip:"Last ovulation day. Strong cardio — maintain the pace all the way through."},
+  16:{workouts:[wo(ARMS,"2kg"),wo(ABS,"2kg")],tip:"Still strong early in luteal. If you feel off midway, drop to 1kg — that's listening to your body."},
+  17:{workouts:[wo(W30,null)],tip:"Steady cardio. Keep your room cool and water close — especially important with sickle cell."},
+  18:{workouts:[wo(ARMS,"2kg")],tip:"Arms only. Quality over quantity — full range of motion, controlled pace."},
+  19:{type:"rest",note:"Rest day. Progesterone is rising — this recovery is intentional, not a skip."},
+  20:{workouts:[wo(W15,null),wo(ABS,"2kg")],tip:"Walk + abs. If fatigue hits mid-abs, drop to 1kg — great instinct, not weakness."},
+  21:{workouts:[wo(W15,null)],tip:"Easy walk to close out early luteal. Stretch your calves and shoulders after."},
+  22:{workouts:[wo(ARMS,"1kg")],tip:"Switching to 1kg — but go higher reps and slower tempo. Lighter load, same effort."},
+  23:{workouts:[wo(W15,null)],tip:"Gentle cardio. If PMS symptoms are present, this walk genuinely helps mood and bloating."},
+  24:{workouts:[wo(ARMS,"1kg"),wo(ABS,"1kg")],tip:"Light arms + abs. Slow and controlled — you're maintaining this week, not pushing."},
+  25:{type:"rest",note:"Rest day. PMS territory — be genuinely kind to yourself today."},
+  26:{workouts:[wo(W15,null)],tip:"Light walk. Even 15 mins helps regulate mood in the late luteal phase."},
+  27:{workouts:[wo(ARMS,"1kg")],tip:"Gentle arms. Focus on breathing and form — slow and steady."},
+  28:{type:"rest",note:"Rest day. Cycle nearly complete. You showed up this month — that's everything."},
+  29:{workouts:[wo(W15,null)],tip:"Final workout of the cycle. Easy walk — then rest up. New cycle starts soon."},
+  30:{type:"rest",note:"Cycle complete. New cycle starts tomorrow — you've got this. 🌸"},
+};
+
+// High-intensity days needing extra hydration reminder
+const HYDRATE_WARN_DAYS = [13,14,15];
+
+// ── Storage helpers ───────────────────────────────────────────────────────
+function ls(key, fallback=null) {
+  try { const v = localStorage.getItem(key); return v !== null ? JSON.parse(v) : fallback; }
+  catch { return fallback; }
+}
+function lsSet(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+}
+
+// ── Date helpers ──────────────────────────────────────────────────────────
+function today() {
+  const d = new Date();
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+function parseDate(str) {
+  const [y,m,d] = str.split("-").map(Number);
+  return new Date(y, m-1, d);
+}
+function dateToStr(date) {
+  return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
+}
+function diffDays(a, b) {
+  return Math.floor((b - a) / 86400000);
+}
+function formatDate(date) {
+  return `${DAYS_OF_WEEK[date.getDay()]}, ${date.getDate()} ${MONTHS[date.getMonth()]} ${date.getFullYear()}`;
+}
+function formatShort(date) {
+  return `${date.getDate()} ${MONTHS[date.getMonth()].slice(0,3)}`;
+}
+
+// ── State ─────────────────────────────────────────────────────────────────
+let state = {
+  cycleStart: ls(STORAGE.CYCLE_START, null),   // "YYYY-MM-DD"
+  done: new Set(ls(STORAGE.DONE, [])),          // Set of "YYYY-MM-DD" strings
+  selectedDate: null,                           // Date object
+  streaks: ls(STORAGE.STREAKS, { current:0, longest:0, lastDoneDate:null }),
+};
+
+// ── Streak calculation ────────────────────────────────────────────────────
+function recalcStreak() {
+  // Build sorted array of done dates
+  const sorted = [...state.done].map(s => parseDate(s)).sort((a,b) => a-b);
+  if (sorted.length === 0) { state.streaks = { current:0, longest:0, lastDoneDate:null }; return; }
+
+  let longest = 1, cur = 1;
+  for (let i = 1; i < sorted.length; i++) {
+    if (diffDays(sorted[i-1], sorted[i]) === 1) { cur++; longest = Math.max(longest, cur); }
+    else cur = 1;
+  }
+
+  // Current streak: count back from today
+  const todayStr = dateToStr(today());
+  let current = 0;
+  let check = today();
+  while (true) {
+    const s = dateToStr(check);
+    if (state.done.has(s)) { current++; check = new Date(check - 86400000); }
+    else break;
+  }
+
+  state.streaks = { current, longest: Math.max(longest, current), lastDoneDate: sorted[sorted.length-1] };
+  lsSet(STORAGE.STREAKS, state.streaks);
+}
+
+// ── Cycle helpers ─────────────────────────────────────────────────────────
+function cycleDay(date) {
+  const start = parseDate(state.cycleStart);
+  const diff = diffDays(start, date) + 1;
+  if (diff < 1 || diff > 30) return null;
+  return diff;
+}
+
+function calendarDateForCycleDay(cycDay) {
+  const start = parseDate(state.cycleStart);
+  return new Date(start.getTime() + (cycDay-1)*86400000);
+}
+
+function nextRestDay() {
+  const todayD = today();
+  for (let cd = 1; cd <= 30; cd++) {
+    const d = SCHED[cd];
+    if (d && d.type === "rest") {
+      const date = calendarDateForCycleDay(cd);
+      if (date >= todayD) return { cycDay: cd, date };
+    }
+  }
+  return null;
+}
+
+// ── Render ────────────────────────────────────────────────────────────────
+function render() {
+  const app = document.getElementById("app");
+  if (!state.cycleStart) { renderSetup(app); return; }
+  recalcStreak();
+  renderMain(app);
+}
+
+function renderSetup(app) {
+  app.innerHTML = `
+    <div class="setup-screen">
+      <div style="font-size:3rem;margin-bottom:16px">🌸</div>
+      <h2>Welcome to Your<br>Workout Tracker</h2>
+      <p>Enter the first day of your current cycle to get started. Everything will be calculated automatically from there.</p>
+      <input type="date" id="startDateInput" value="2026-04-21" max="${dateToStr(today())}"/>
+      <button class="btn-start" onclick="setupCycle()">Start My Plan →</button>
+    </div>`;
+}
+
+function setupCycle() {
+  const val = document.getElementById("startDateInput").value;
+  if (!val) return;
+  state.cycleStart = val;
+  state.selectedDate = null;
+  lsSet(STORAGE.CYCLE_START, val);
+  render();
+}
+
+function renderMain(app) {
+  const todayDate   = today();
+  const todayStr    = dateToStr(todayDate);
+  const selDate     = state.selectedDate || todayDate;
+  const selStr      = dateToStr(selDate);
+  const todayCycDay = cycleDay(todayDate);
+  const selCycDay   = cycleDay(selDate);
+
+  // Stats
+  const doneCount = state.done.size;
+  const totalWorkoutDays = Object.values(SCHED).filter(s => !s.type).length;
+  const doneWorkoutDays  = [...state.done].filter(s => {
+    const cd = cycleDay(parseDate(s));
+    return cd && SCHED[cd] && !SCHED[cd].type;
+  }).length;
+  const completionRate = totalWorkoutDays > 0 ? Math.round((doneWorkoutDays/totalWorkoutDays)*100) : 0;
+
+  // Next rest day
+  const nextRest = nextRestDay();
+
+  // Today phase
+  const todayPhase = todayCycDay ? PHASES[getPhase(todayCycDay)] : null;
+  const todayPhaseName = todayCycDay ? getPhase(todayCycDay) : null;
+  const todayMsg = todayPhaseName
+    ? PHASE_MESSAGES[todayPhaseName][todayCycDay % PHASE_MESSAGES[todayPhaseName].length]
+    : "Your cycle tracker is ready!";
+
+  let html = `<div class="header"><h1>My Workout Plan 🌸</h1><p>Tap a day · complete your workout · tick it off ✓</p></div>`;
+
+  // Today banner
+  if (todayCycDay && todayPhase) {
+    html += `<div class="today-banner" style="background:${todayPhase.color}">
+      <div class="tb-top">
+        <div>
+          <div class="tb-date">${formatDate(todayDate)}</div>
+          <div class="tb-day">Day ${todayCycDay} of 30</div>
+          <div class="tb-sub">${todayPhase.label} Phase</div>
+        </div>
+        <span class="tb-phase">${SCHED[todayCycDay] && SCHED[todayCycDay].type === "rest" ? "🌿 Rest Day" : "💪 Workout Day"}</span>
+      </div>
+      <div class="tb-msg">${todayMsg}</div>
+    </div>`;
+  } else if (todayCycDay === null) {
+    html += `<div class="card" style="text-align:center;padding:20px">
+      <div style="font-size:0.85rem;color:#999">Today is outside your current cycle window.<br>Start a new cycle when your next period begins.</div>
+    </div>`;
+  }
+
+  // Stats
+  html += `<div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-icon">🔥</div>
+      <div class="stat-val" style="color:#e67e22">${state.streaks.current}</div>
+      <div class="stat-lbl">Day Streak</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🏆</div>
+      <div class="stat-val" style="color:#f39c12">${state.streaks.longest}</div>
+      <div class="stat-lbl">Best Streak</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-val" style="color:#27ae60">${completionRate}%</div>
+      <div class="stat-lbl">Done Rate</div>
+    </div>
+  </div>`;
+
+  // Progress bar
+  html += `<div class="card">
+    <div class="card-label">Cycle progress</div>
+    <div class="progress-row">
+      <span style="font-size:0.76rem;color:#999">${doneCount} days ticked off</span>
+      <span class="progress-count">${todayCycDay ? todayCycDay : "–"} / 30 days in</span>
+    </div>
+    <div class="bar-bg"><div class="bar-fill" style="width:${todayCycDay ? (todayCycDay/30)*100 : 0}%"></div></div>
+    ${nextRest ? `<div style="font-size:0.72rem;color:#aaa;margin-top:8px;text-align:right">Next rest day: <strong style="color:#8e44ad">Day ${nextRest.cycDay}</strong> · ${formatShort(nextRest.date)}</div>` : ""}
+  </div>`;
+
+  // Calendar
+  html += renderCalendar(selDate);
+
+  // Selected day detail
+  if (selCycDay) {
+    html += renderDetail(selDate, selCycDay, selStr);
+  }
+
+  // New cycle button
+  html += `<button class="btn-new-cycle" onclick="newCycle()">🌸 Start New Cycle</button>`;
+
+  // Legend
+  html += `<div class="card">
+    <div class="card-label">Phase guide</div>
+    <div class="legend">
+      ${PHASE_ORDER.map(k => `<div class="legend-item"><div class="dot" style="background:${PHASES[k].color}"></div>${PHASE_LABELS[k]}</div>`).join("")}
+    </div>
+  </div>`;
+
+  html += `<div class="safety">💧 Always hydrate before &amp; during workouts<br><strong>Stop immediately</strong> if you feel bone pain, chest tightness, or dizziness</div>`;
+
+  app.innerHTML = html;
+}
+
+function renderCalendar(selDate) {
+  const start    = parseDate(state.cycleStart);
+  const todayD   = today();
+  const selStr   = dateToStr(selDate);
+
+  // Build 5-week grid starting from the week containing day 1
+  const startDow = start.getDay(); // 0=Sun
+  let html = `<div class="card">
+    <div class="card-label">Cycle calendar</div>
+    <div class="cal-header-row">
+      ${DAYS_OF_WEEK.map(d=>`<div class="cal-header-cell">${d}</div>`).join("")}
+    </div>
+    <div class="cal-grid">`;
+
+  // Empty cells before start
+  for (let i = 0; i < startDow; i++) {
+    html += `<div class="cal-cell empty"></div>`;
+  }
+
+  // 30 cycle days
+  for (let cd = 1; cd <= 30; cd++) {
+    const date    = new Date(start.getTime() + (cd-1)*86400000);
+    const dStr    = dateToStr(date);
+    const phase   = getPhase(cd);
+    const pColor  = PHASES[phase].color;
+    const isToday = dStr === dateToStr(todayD);
+    const isSel   = dStr === selStr;
+    const isDone  = state.done.has(dStr);
+    const isRest  = SCHED[cd] && SCHED[cd].type === "rest";
+
+    let cls = "cal-cell has-phase";
+    if (isToday) cls += " is-today";
+    if (isSel)   cls += " selected";
+    if (isDone)  cls += " done-day";
+
+    html += `<div class="${cls}"
+      style="background:${pColor};color:white;${isSel ? `box-shadow:0 0 0 2.5px white,0 0 0 4.5px ${pColor};` : ""}${isToday ? "outline:2.5px solid white;outline-offset:-3px;" : ""}"
+      onclick="selectDate('${dStr}')">
+      <div class="cell-day">${date.getDate()}</div>
+      <div class="cell-cycle">${isRest ? "🌿" : `D${cd}`}</div>
+    </div>`;
+  }
+
+  html += `</div>
+    <button class="btn-today" onclick="selectDate('${dateToStr(todayD)}')">📍 Jump to Today</button>
+  </div>`;
+  return html;
+}
+
+function renderDetail(date, cycDay, dateStr) {
+  const data    = SCHED[cycDay] || SCHED[29];
+  const phase   = getPhase(cycDay);
+  const p       = PHASES[phase];
+  const isDone  = state.done.has(dateStr);
+  const isToday = dateStr === dateToStr(today());
+  const needsHydrate = HYDRATE_WARN_DAYS.includes(cycDay);
+
+  let html = `<div class="detail-card" style="border-left-color:${p.color}">
+    <div class="detail-top">
+      <div class="detail-daynum">Cycle Day ${cycDay}${isToday ? " · Today" : ""}</div>
+      <div class="detail-caldate">${formatDate(date)}</div>
+    </div>
+    <span class="phase-badge" style="background:${p.color}">${p.label}</span>`;
+
+  if (isDone) html += `<div class="done-banner">✅ Day ${cycDay} done — great work!</div>`;
+  if (needsHydrate) html += `<div class="hydrate-warning">💧 High intensity day — drink extra water! Sickle cell risk.</div>`;
+
+  if (data.type === "rest") {
+    html += `<div class="rest-wrap">
+      <div class="rest-icon">🌿</div>
+      <div class="rest-title">Rest Day</div>
+      <div class="rest-note">${data.note}</div>
+    </div>`;
+  } else {
+    html += `<div class="workout-title">Today's Workout${data.workouts.length > 1 ? "s" : ""}</div>`;
+    data.workouts.forEach(w => {
+      const badge = w.weight ? `<span class="weight-badge ${w.weight==="1kg"?"w1":"w2"}">${w.weight}</span>` : "";
+      html += `<div class="workout-row">
+        <div class="wo-icon">${w.icon}</div>
+        <div class="wo-info">
+          <div class="wo-name">${w.name}${badge}</div>
+          <div class="wo-detail">${w.detail}</div>
+          <a class="wo-link" href="${w.link}" target="_blank" style="background:${p.color}">▶ Open on YouTube</a>
+        </div>
+      </div>`;
+    });
+    if (data.tip) html += `<div class="tip-box" style="background:${p.light};border:1px solid ${p.color}33"><strong style="color:${p.color}">💡 Tip: </strong>${data.tip}</div>`;
+  }
+
+  const btnClass = isDone ? "unmark" : "mark";
+  const btnText  = isDone ? "↩ Mark as not done" : `✓ Mark Day ${cycDay} as done`;
+  html += `<button class="btn-done ${btnClass}" onclick="toggleDone('${dateStr}')">${btnText}</button>`;
+  html += `</div>`;
+  return html;
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────
+function selectDate(dateStr) {
+  state.selectedDate = parseDate(dateStr);
+  render();
+  setTimeout(() => {
+    const el = document.querySelector(".detail-card");
+    if (el) el.scrollIntoView({ behavior:"smooth", block:"start" });
+  }, 50);
+}
+
+function toggleDone(dateStr) {
+  state.done.has(dateStr) ? state.done.delete(dateStr) : state.done.add(dateStr);
+  lsSet(STORAGE.DONE, [...state.done]);
+  recalcStreak();
+  lsSet(STORAGE.STREAKS, state.streaks);
+  render();
+}
+
+function newCycle() {
+  const confirmed = confirm("Starting a new cycle will reset your calendar to a new start date.\n\nYour completed days history will be saved.\n\nContinue?");
+  if (!confirmed) return;
+  // Save history
+  const history = ls(STORAGE.HISTORY, []);
+  history.push({ cycleStart: state.cycleStart, done: [...state.done], streaks: state.streaks });
+  lsSet(STORAGE.HISTORY, history);
+  // Reset
+  state.done = new Set();
+  state.selectedDate = null;
+  state.cycleStart = null;
+  lsSet(STORAGE.DONE, []);
+  lsSet(STORAGE.CYCLE_START, null);
+  render();
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
