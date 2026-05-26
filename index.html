@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Workout Plan 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--menstrual:#c0392b;--follicular:#27ae60;--ovulation:#e67e22;--luteal-early:#8e44ad;--luteal-late:#2980b9;--waiting:#5d6d7e;--bg:#faf8f5;--card:#fff;--text:#1a1a1a;--muted:#aaa;--radius:16px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:20px 16px 80px;max-width:480px;margin:0 auto;background-image:radial-gradient(ellipse at 20% 0%,rgba(39,174,96,0.04) 0%,transparent 60%),radial-gradient(ellipse at 80% 100%,rgba(192,57,43,0.04) 0%,transparent 60%)}
+.card{background:var(--card);border-radius:var(--radius);padding:16px 18px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.lbl{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px}
+.banner{border-radius:var(--radius);padding:16px 18px;margin-bottom:12px;color:#fff;box-shadow:0 4px 16px rgba(0,0,0,.12)}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
+.sc{background:var(--card);border-radius:14px;padding:14px 10px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.sv{font-family:'DM Serif Display',serif;font-size:1.5rem;line-height:1;margin-bottom:2px}
+.sl{font-size:.62rem;color:var(--muted);font-weight:700;text-transform:uppercase}
+.bar-bg{background:#f0f0f0;border-radius:99px;height:7px;overflow:hidden}
+.bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#27ae60,#2ecc71);transition:width .4s}
+.cal-hr{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cc{aspect-ratio:1;border-radius:8px;border:1.5px solid #efefef;background:transparent;font-family:'DM Sans',sans-serif;font-size:.68rem;cursor:pointer;color:#333;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;line-height:1.2;transition:all .15s}
+.cc.hp{color:#fff;border-color:transparent}
+.cc.dn::after{content:'✓';position:absolute;top:1px;right:2px;font-size:8px;font-weight:900}
+.cc.emp{border-color:transparent;cursor:default}
+.cc-d{font-size:.74rem;font-weight:700}
+.cc-c{font-size:.5rem;opacity:.85}
+.btn-t{width:100%;padding:9px;border:2px solid #e8e8e8;border-radius:10px;background:transparent;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:700;color:#666;cursor:pointer;margin-top:8px}
+.dc{background:var(--card);border-radius:var(--radius);padding:20px 18px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.05);border-left:5px solid #ccc}
+.pb{display:inline-flex;align-items:center;padding:4px 12px;border-radius:99px;font-size:.68rem;font-weight:700;text-transform:uppercase;color:#fff;margin-bottom:12px}
+.db{display:flex;align-items:center;gap:8px;background:#eafaf1;border:1px solid #a9dfbf;border-radius:10px;padding:8px 12px;font-size:.78rem;font-weight:600;color:#1e8449;margin-bottom:12px}
+.hb{display:flex;align-items:center;gap:8px;background:#fff8e1;border:1px solid #f9ca24;border-radius:10px;padding:8px 12px;font-size:.76rem;font-weight:600;color:#b7770d;margin-bottom:12px}
+.wb-banner{display:flex;align-items:center;gap:8px;background:#eaf4fb;border:1px solid #aed6f1;border-radius:10px;padding:10px 12px;font-size:.8rem;font-weight:600;color:#1a5276;margin-bottom:12px}
+.wr{display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-bottom:1px solid #f3f3f3}
+.wr:last-of-type{border-bottom:none}
+.wi{width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#f7f7f7;border-radius:9px;font-size:1.15rem}
+.wl{display:inline-flex;align-items:center;gap:4px;font-size:.71rem;font-weight:700;padding:5px 11px;border-radius:7px;color:#fff;text-decoration:none}
+.wb{display:inline-block;padding:2px 7px;border-radius:99px;font-size:.63rem;font-weight:700;margin-left:5px;vertical-align:middle}
+.w1{background:#ffeaea;color:#c0392b}
+.w2{background:#eafaf1;color:#27ae60}
+.tip{border-radius:10px;padding:11px 13px;margin-top:12px;font-size:.78rem;line-height:1.65;color:#444}
+.rest-w{text-align:center;padding:20px 0}
+.ri{font-size:2.5rem;margin-bottom:8px}
+.rt{font-family:'DM Serif Display',serif;font-size:1.2rem;margin-bottom:6px}
+.rn{font-size:.8rem;line-height:1.7;color:#777}
+.btn-done{width:100%;margin-top:14px;padding:13px;border:none;border-radius:11px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.mk{background:#2ecc71;color:#fff}
+.mk:active{background:#27ae60;transform:scale(.98)}
+.um{background:#f0f0f0;color:#888}
+.btn-period{width:100%;padding:13px;border:none;border-radius:11px;background:var(--menstrual);color:#fff;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-nc{width:100%;padding:12px;border:2px dashed #e0e0e0;border-radius:11px;background:transparent;font-family:'DM Sans',sans-serif;font-size:.83rem;font-weight:700;color:#999;cursor:pointer;margin-bottom:12px}
+.leg{display:flex;flex-wrap:wrap;gap:5px 12px;margin-top:8px}
+.li{display:flex;align-items:center;gap:4px;font-size:.68rem;color:#999}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.saf{text-align:center;font-size:.71rem;color:var(--muted);line-height:1.8;margin-top:8px}
+.saf strong{color:#e74c3c}
+.setup{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;text-align:center;padding:20px}
+.setup h2{font-family:'DM Serif Display',serif;font-size:1.6rem;margin-bottom:8px}
+.setup p{font-size:.84rem;color:#777;line-height:1.6;margin-bottom:24px}
+.setup input{width:100%;padding:14px;border:2px solid #e8e8e8;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:1rem;margin-bottom:12px;color:#1a1a1a;background:#fff}
+.btn-s{width:100%;padding:14px;border:none;border-radius:12px;background:#27ae60;color:#fff;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;cursor:pointer}
+.waiting-card{text-align:center;padding:28px 20px}
+.waiting-card .wi-icon{font-size:2.8rem;margin-bottom:10px}
+.waiting-card h3{font-family:'DM Serif Display',serif;font-size:1.3rem;margin-bottom:8px}
+.waiting-card p{font-size:.82rem;line-height:1.7;color:#777;margin-bottom:16px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+// ── Videos ────────────────────────────────────────────────────────────────
+const STEP  ={i:"🚶",n:"10,000 Indoor Step Challenge",d:"Joanna Soh · High energy cardio",l:"https://youtu.be/R3AUw3-jtEo"};
+const WALK  ={i:"🚶",n:"Heart Healthy 1 Mile Walk",d:"Walk at Home · Gentle cardio",l:"https://youtu.be/u08lo0bESJc"};
+const ARMS  ={i:"💪",n:"20-Min Standing Arm Workout",d:"fitbymik · No pushups",l:"https://youtu.be/M5LcX_dpL34"};
+const ABS   ={i:"🔥",n:"10-Min Standing Abs Workout",d:"fitbymik · One dumbbell",l:"https://youtu.be/KVt_uBX-XQw"};
+const wo=(x,k)=>({...x,wt:k});
+
+// ── Schedule ──────────────────────────────────────────────────────────────
+// Types: r=rest, w=waiting(late luteal extended)
+const SCHED={
+  // MENSTRUATION 1-3
+  1:{r:1,nt:"Day 1 — full rest. Your body is working hard. Hydrate and be kind to yourself."},
+  2:{r:1,nt:"Day 2 — rest or a gentle 5-min stretch if you feel up to it. No pressure."},
+  3:{ws:[wo(WALK,null)],tp:"Last period day — gentle 1 mile walk only. No weights. Tomorrow everything begins!"},
+  // FOLLICULAR 4-12
+  4:{ws:[wo(ARMS,"2kg"),wo(ABS,"2kg")],tp:"Follicular phase starts! Arms + abs back to back. Energy is rising — use it."},
+  5:{ws:[wo(STEP,null)],tp:"Step challenge day! High energy cardio — aim for the full session. You've got this."},
+  6:{ws:[wo(ARMS,"2kg")],tp:"Arms only today. 3 counts down, 1 up — slow reps make 2kg feel like 4kg."},
+  7:{r:1,nt:"Rest day. Recovery is where the muscle actually builds — this is productive."},
+  8:{ws:[wo(ARMS,"2kg"),wo(ABS,"2kg")],tp:"Arms + Abs combo. Add 5 pulse reps at the end of each move to finish strong."},
+  9:{ws:[wo(STEP,null)],tp:"Step challenge again — try to keep moving faster than last time."},
+  10:{ws:[wo(ARMS,"2kg")],tp:"Slow reps — 4 counts down, 1 up. Minimal rest between sets. Really work those 2kg."},
+  11:{ws:[wo(WALK,null)],tp:"Lighter cardio today. Walk + 5 mins of shoulder rolls and ankle circles after."},
+  12:{ws:[wo(ARMS,"2kg"),wo(ABS,"2kg")],tp:"Last follicular day — give it everything. Slow reps, pulses, 10 sec rest only."},
+  // OVULATION 13-15
+  13:{ws:[wo(STEP,null)],tp:"Peak energy starts NOW. Step challenge at your fastest pace yet. This is your power window."},
+  14:{ws:[wo(ARMS,"2kg"),wo(ABS,"2kg")],tp:"Your strongest day of the month. Slow reps + pulses + only 10 sec rest. Push the 2kg to its limit."},
+  15:{ws:[wo(STEP,null)],tp:"Last ovulation day. Strong cardio — maintain the pace all the way through."},
+  // EARLY LUTEAL 16-21
+  16:{ws:[wo(ARMS,"2kg"),wo(ABS,"2kg")],tp:"Still strong early in luteal. Do the full combo — drop to 1kg if you feel off midway."},
+  17:{ws:[wo(STEP,null)],tp:"Cardio day. Keep room cool, water close — especially important with sickle cell."},
+  18:{ws:[wo(ARMS,"2kg")],tp:"Arms only. Quality over quantity — full range of motion, controlled pace."},
+  19:{r:1,nt:"Rest day. Progesterone is rising — this recovery is intentional, not a skip."},
+  20:{ws:[wo(WALK,null),wo(ABS,"2kg")],tp:"Gentle walk + abs. If fatigue hits mid-abs, drop to 1kg. Great instinct, not weakness."},
+  21:{ws:[wo(WALK,null)],tp:"Easy walk to close out early luteal. Stretch calves and shoulders after."},
+  // LATE LUTEAL 22-30
+  22:{ws:[wo(ARMS,"1kg")],tp:"Switching to 1kg — higher reps, slower tempo. Lighter load, same effort."},
+  23:{ws:[wo(WALK,null)],tp:"Gentle 1 mile walk. Helps with PMS mood and bloating if that's showing up."},
+  24:{ws:[wo(ARMS,"1kg"),wo(ABS,"1kg")],tp:"Light arms + abs. Slow and controlled — maintaining this week, not pushing."},
+  25:{r:1,nt:"Rest day. PMS territory — be genuinely kind to yourself today."},
+  26:{ws:[wo(WALK,null)],tp:"Light walk. Even this much helps regulate mood in late luteal."},
+  27:{ws:[wo(ARMS,"1kg")],tp:"Gentle arms. Focus on breathing and form — slow and steady."},
+  28:{r:1,nt:"Rest day. Cycle nearly complete. You showed up — that's everything."},
+  29:{ws:[wo(WALK,null)],tp:"Final workout of the cycle. Easy walk — then rest up."},
+  30:{r:1,nt:"Cycle complete. New cycle starts soon — you've got this. 🌸"},
+};
+
+// Extended late luteal workout for waiting days
+const WAITING_WORKOUT={ws:[wo(WALK,null)],tp:"Your period is running late — gentle 1 mile walk today. Stay hydrated and be patient with your body. Tap 'My period started today' the moment it arrives."};
+
+const HYDRATE_WARN=[13,14,15];
+const PHASES={
+  menstrual:{l:"Menstruation",c:"#c0392b",lt:"#fdecea"},
+  follicular:{l:"Follicular",c:"#27ae60",lt:"#eafaf1"},
+  ovulation:{l:"Ovulation",c:"#e67e22",lt:"#fef5ec"},
+  lutealEarly:{l:"Early Luteal",c:"#8e44ad",lt:"#f5eef8"},
+  lutealLate:{l:"Late Luteal",c:"#2980b9",lt:"#eaf4fb"},
+  waiting:{l:"Waiting for Period",c:"#5d6d7e",lt:"#eaecee"},
+};
+const PHASE_ORDER=["menstrual","follicular","ovulation","lutealEarly","lutealLate"];
+const PHASE_LABELS={menstrual:"Menstruation (1-3)",follicular:"Follicular (4-12)",ovulation:"Ovulation (13-15)",lutealEarly:"Early Luteal (16-21)",lutealLate:"Late Luteal (22-30)"};
+const DOW=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const MON=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const PM={
+  menstrual:["Rest, hydrate, be kind to yourself","Your body is doing real work right now","Gentle movement only — you're doing great"],
+  follicular:["Energy rising — let's go!","Your strongest weeks are here","Build momentum, one day at a time"],
+  ovulation:["Peak power window — make it count!","You're at your strongest right now","Push a little harder — you've got it"],
+  lutealEarly:["Still strong, listen to your body","Solid effort, ease in if needed","You're doing amazing — keep it consistent"],
+  lutealLate:["Gentle and consistent wins this week","Be kind to yourself — almost there","Rest is productive. Keep showing up"],
+  waiting:["Your body is on its own timeline — trust it","Stay gentle while you wait","Light movement, lots of hydration, patience"],
+};
+
+// ── Storage ───────────────────────────────────────────────────────────────
+const ST={CS:"wt2_cs",EX:"wt2_ex",DN:"wt2_dn",SK:"wt2_sk",HI:"wt2_hi"};
+function ls(k,fb=null){try{const v=localStorage.getItem(k);return v!==null?JSON.parse(v):fb}catch{return fb}}
+function lss(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+
+// ── Date helpers ──────────────────────────────────────────────────────────
+function td(){const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate())}
+function pd(s){const[y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)}
+function d2s(d){return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function df(a,b){return Math.floor((b-a)/86400000)}
+function fdate(d){return`${DOW[d.getDay()]}, ${d.getDate()} ${MON[d.getMonth()]} ${d.getFullYear()}`}
+function fshort(d){return`${d.getDate()} ${MON[d.getMonth()].slice(0,3)}`}
+
+// ── Phase logic ───────────────────────────────────────────────────────────
+function gp(d){
+  if(d<=3)return"menstrual";
+  if(d<=12)return"follicular";
+  if(d<=15)return"ovulation";
+  if(d<=21)return"lutealEarly";
+  return"lutealLate";
+}
+
+// ── State ─────────────────────────────────────────────────────────────────
+let S={
+  cs:ls(ST.CS,null),      // actual cycle start date string (set when period arrives)
+  ex:ls(ST.EX,null),      // expected cycle start date string
+  dn:new Set(ls(ST.DN,[])),
+  sd:null,
+  sk:ls(ST.SK,{c:0,l:0}),
+};
+
+// ── Helpers ───────────────────────────────────────────────────────────────
+function isWaiting(){
+  // Waiting = expected date has passed but no actual start yet
+  if(S.cs)return false; // period already started
+  if(!S.ex)return false;
+  return td()>=pd(S.ex);
+}
+
+function waitingDay(){
+  // How many days past expected date
+  if(!S.ex)return 0;
+  return Math.max(0,df(pd(S.ex),td()));
+}
+
+function cycleDay(date){
+  if(!S.cs)return null;
+  const diff=df(pd(S.cs),date)+1;
+  if(diff<1||diff>30)return null;
+  return diff;
+}
+
+function calDate(cd){
+  const st=pd(S.cs);
+  return new Date(st.getTime()+(cd-1)*86400000);
+}
+
+function nextRest(){
+  const t=td();
+  for(let n=1;n<=30;n++){
+    const d=SCHED[n];
+    if(d&&d.r&&S.cs){
+      const dt=calDate(n);
+      if(dt>=t)return{n,dt};
+    }
+  }
+  return null;
+}
+
+function rsk(){
+  const so=[...S.dn].map(s=>pd(s)).sort((a,b)=>a-b);
+  if(!so.length){S.sk={c:0,l:0};return}
+  let l=1,c=1;
+  for(let i=1;i<so.length;i++){
+    if(df(so[i-1],so[i])===1){c++;l=Math.max(l,c)}else c=1;
+  }
+  let cur=0,ch=td();
+  while(true){const s=d2s(ch);if(S.dn.has(s)){cur++;ch=new Date(ch-86400000)}else break}
+  S.sk={c:cur,l:Math.max(l,cur)};
+  lss(ST.SK,S.sk);
+}
+
+// ── Render ────────────────────────────────────────────────────────────────
+function render(){
+  const a=document.getElementById("app");
+  if(!S.ex&&!S.cs){rSetup(a);return}
+  rsk();
+  rMain(a);
+}
+
+function rSetup(a){
+  a.innerHTML=`<div class="setup">
+    <div style="font-size:3rem;margin-bottom:16px">🌸</div>
+    <h2>Welcome to Your<br>Workout Tracker</h2>
+    <p>Enter your <strong>expected</strong> next period start date.<br>You can update it anytime if your period runs late.</p>
+    <input type="date" id="exInput" value="2026-05-20"/>
+    <button class="btn-s" onclick="setupCycle()">Start My Plan</button>
+  </div>`;
+}
+
+function setupCycle(){
+  const v=document.getElementById("exInput").value;
+  if(!v)return;
+  S.ex=v;
+  S.cs=null;
+  S.sd=null;
+  lss(ST.EX,v);
+  lss(ST.CS,null);
+  render();
+}
+
+function periodStartedToday(){
+  const s=d2s(td());
+  S.cs=s;
+  S.ex=null;
+  S.sd=null;
+  lss(ST.CS,s);
+  lss(ST.EX,null);
+  render();
+}
+
+function rMain(a){
+  const t=td(),ts=d2s(t);
+  const sel=S.sd||t,ss=d2s(sel);
+  const tcd=S.cs?cycleDay(t):null;
+  const scd=S.cs?cycleDay(sel):null;
+  const waiting=isWaiting();
+  const wdays=waitingDay();
+  const dn=S.dn.size;
+
+  const dwD=[...S.dn].filter(s=>{const n=cycleDay(pd(s));return n&&SCHED[n]&&!SCHED[n].r}).length;
+  const twD=Object.values(SCHED).filter(s=>!s.r).length;
+  const cr=twD>0?Math.round((dwD/twD)*100):0;
+  const nr=nextRest();
+
+  // Phase for today
+  let todayPhase,todayPhaseName,todayMsg;
+  if(waiting){
+    todayPhase=PHASES.waiting;
+    todayPhaseName="waiting";
+    todayMsg=PM.waiting[wdays%PM.waiting.length];
+  } else if(tcd){
+    todayPhaseName=gp(tcd);
+    todayPhase=PHASES[todayPhaseName];
+    todayMsg=PM[todayPhaseName][tcd%PM[todayPhaseName].length];
+  }
+
+  let h=`<div style="text-align:center;margin-bottom:20px">
+    <h1 style="font-family:'DM Serif Display',serif;font-size:1.8rem;letter-spacing:-.5px;margin-bottom:3px">My Workout Plan 🌸</h1>
+    <p style="font-size:.78rem;color:#aaa">Tap a day · do your workout · tick it off ✓</p>
+  </div>`;
+
+  // Today banner
+  if(todayPhase){
+    const dayLabel=waiting?`${wdays} day${wdays!==1?"s":""} late`:`Day ${tcd} of 30`;
+    const typeLabel=waiting?"🌙 Waiting":tcd&&SCHED[tcd]&&SCHED[tcd].r?"🌿 Rest Day":"💪 Workout Day";
+    h+=`<div class="banner" style="background:${todayPhase.c}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+        <div>
+          <div style="font-size:.78rem;opacity:.85;font-weight:500">${fdate(t)}</div>
+          <div style="font-family:'DM Serif Display',serif;font-size:2rem;line-height:1;margin-bottom:2px">${dayLabel}</div>
+          <div style="font-size:.78rem;opacity:.8">${todayPhase.l}</div>
+        </div>
+        <span style="font-size:.68rem;font-weight:700;text-transform:uppercase;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:99px">${typeLabel}</span>
+      </div>
+      <div style="font-size:.8rem;opacity:.9;font-style:italic;line-height:1.5">${todayMsg}</div>
+    </div>`;
+  }
+
+  // Period started button — show when waiting
+  if(waiting){
+    h+=`<button class="btn-period" onclick="periodStartedToday()">🩸 My period started today!</button>`;
+  }
+
+  // Stats
+  h+=`<div class="stats">
+    <div class="sc"><div style="font-size:1.3rem;margin-bottom:4px">🔥</div><div class="sv" style="color:#e67e22">${S.sk.c}</div><div class="sl">Streak</div></div>
+    <div class="sc"><div style="font-size:1.3rem;margin-bottom:4px">🏆</div><div class="sv" style="color:#f39c12">${S.sk.l}</div><div class="sl">Best</div></div>
+    <div class="sc"><div style="font-size:1.3rem;margin-bottom:4px">✅</div><div class="sv" style="color:#27ae60">${cr}%</div><div class="sl">Done Rate</div></div>
+  </div>`;
+
+  // Progress
+  if(tcd){
+    h+=`<div class="card">
+      <div class="lbl">Cycle progress</div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:7px">
+        <span style="font-size:.76rem;color:#999">${dn} days ticked off</span>
+        <span style="font-size:.76rem;font-weight:700;color:#27ae60">${tcd} / 30 days in</span>
+      </div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${(tcd/30)*100}%"></div></div>
+      ${nr?`<div style="font-size:.7rem;color:#aaa;margin-top:8px;text-align:right">Next rest: <strong style="color:#8e44ad">Day ${nr.n}</strong> · ${fshort(nr.dt)}</div>`:""}
+    </div>`;
+  } else if(waiting){
+    h+=`<div class="card">
+      <div class="lbl">Cycle status</div>
+      <div class="wb-banner">⏳ Period is ${wdays} day${wdays!==1?"s":""} late — staying in gentle Late Luteal mode until it arrives.</div>
+      <div style="font-size:.76rem;color:#999">Tap the red button above when your period starts to reset your cycle.</div>
+    </div>`;
+  }
+
+  // Calendar — only show if cycle has started
+  if(S.cs){
+    h+=rCal(sel);
+    if(scd)h+=rDet(sel,scd,ss);
+  } else if(waiting){
+    // Show today's waiting workout
+    h+=rWaitingDet(ts);
+  }
+
+  // Buttons
+  if(S.cs){
+    h+=`<button class="btn-nc" onclick="nc()">🌸 Start New Cycle</button>`;
+  }
+  if(!waiting&&!S.cs){
+    h+=`<button class="btn-period" onclick="periodStartedToday()">🩸 My period started today!</button>`;
+  }
+
+  // Update expected date
+  h+=`<div class="card">
+    <div class="lbl">Update expected period date</div>
+    <input type="date" id="exUp" style="width:100%;padding:10px;border:2px solid #e8e8e8;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:#1a1a1a;background:#fff;margin-bottom:8px" value="${S.ex||""}"/>
+    <button onclick="updateEx()" style="width:100%;padding:10px;border:none;border-radius:10px;background:#f0f0f0;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:700;color:#555;cursor:pointer">Update Expected Date</button>
+  </div>`;
+
+  // Legend
+  h+=`<div class="card">
+    <div class="lbl">Phase guide</div>
+    <div class="leg">
+      ${PHASE_ORDER.map(k=>`<div class="li"><div class="dot" style="background:${PHASES[k].c}"></div>${PHASE_LABELS[k]}</div>`).join("")}
+      <div class="li"><div class="dot" style="background:${PHASES.waiting.c}"></div>Waiting / Late Period</div>
+    </div>
+  </div>`;
+
+  h+=`<div class="saf">💧 Always hydrate before and during workouts<br><strong>Stop immediately</strong> if you feel bone pain, chest tightness, or dizziness</div>`;
+  a.innerHTML=h;
+}
+
+function rWaitingDet(ds){
+  const p=PHASES.waiting;
+  const isDone=S.dn.has(ds);
+  let h=`<div class="dc" style="border-left-color:${p.c}">
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#aaa;margin-bottom:4px">Today · Waiting Mode</div>
+    <span class="pb" style="background:${p.c}">Extended Late Luteal</span>
+    ${isDone?`<div class="db">✅ Done — great job staying consistent while you wait!</div>`:""}
+    <div class="wb-banner">⏳ Your period is running late. Staying in gentle mode — light movement only until it arrives.</div>
+    <div style="font-weight:700;font-size:1rem;margin-bottom:8px">Today's Workout</div>
+    <div class="wr">
+      <div class="wi">${WALK.i}</div>
+      <div style="flex:1">
+        <div style="font-weight:600;font-size:.88rem;margin-bottom:2px">${WALK.n}</div>
+        <div style="font-size:.74rem;color:#aaa;margin-bottom:6px">${WALK.d}</div>
+        <a class="wl" href="${WALK.l}" target="_blank" style="background:${p.c}">▶ Open on YouTube</a>
+      </div>
+    </div>
+    <div class="tip" style="background:#eaecee;border:1px solid ${p.c}33"><strong style="color:${p.c}">💡 Tip: </strong>${WAITING_WORKOUT.tp}</div>
+    <button class="btn-done ${isDone?"um":"mk"}" onclick="tog('${ds}')">${isDone?"↩ Mark as not done":"✓ Mark today as done"}</button>
+  </div>`;
+  return h;
+}
+
+function rCal(sel){
+  const st=pd(S.cs),t=td(),ss=d2s(sel),sdow=st.getDay();
+  let h=`<div class="card">
+    <div class="lbl">Cycle calendar</div>
+    <div class="cal-hr">${DOW.map(d=>`<div style="text-align:center;font-size:.6rem;font-weight:700;color:#aaa;text-transform:uppercase">${d}</div>`).join("")}</div>
+    <div class="cal-g">`;
+  for(let i=0;i<sdow;i++)h+=`<div class="cc emp"></div>`;
+  for(let n=1;n<=30;n++){
+    const dt=new Date(st.getTime()+(n-1)*86400000),ds=d2s(dt);
+    const isT=ds===d2s(t),isSel=ds===ss,isDn=S.dn.has(ds),isR=SCHED[n]&&SCHED[n].r;
+    const ph=gp(n),pc=PHASES[ph].c;
+    let cl="cc hp";if(isDn)cl+=" dn";
+    h+=`<div class="${cl}" style="background:${pc};${isSel?`box-shadow:0 0 0 2.5px white,0 0 0 4.5px ${pc};`:""}${isT?"outline:2.5px solid white;outline-offset:-3px;font-weight:800;":""}" onclick="sel2('${ds}')">
+      <div class="cc-d">${dt.getDate()}</div>
+      <div class="cc-c">${isR?"🌿":`D${n}`}</div>
+    </div>`;
+  }
+  h+=`</div><button class="btn-t" onclick="sel2('${d2s(t)}')">📍 Jump to Today</button></div>`;
+  return h;
+}
+
+function rDet(date,cd,ds){
+  const data=SCHED[cd]||SCHED[29];
+  const ph=gp(cd),p=PHASES[ph];
+  const isDone=S.dn.has(ds);
+  const isT=ds===d2s(td());
+  const needsH=HYDRATE_WARN.includes(cd);
+  let h=`<div class="dc" style="border-left-color:${p.c}">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+      <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#aaa">Cycle Day ${cd}${isT?" · Today":""}</div>
+      <div style="font-size:.72rem;color:#aaa">${fdate(date)}</div>
+    </div>
+    <span class="pb" style="background:${p.c}">${p.l}</span>
+    ${isDone?`<div class="db">✅ Day ${cd} done — great work!</div>`:""}
+    ${needsH?`<div class="hb">💧 High intensity day — drink extra water! Sickle cell reminder.</div>`:""}`;
+  if(data.r){
+    h+=`<div class="rest-w"><div class="ri">🌿</div><div class="rt">Rest Day</div><div class="rn">${data.nt}</div></div>`;
+  } else {
+    h+=`<div style="font-weight:700;font-size:1rem;margin-bottom:8px">Today's Workout${data.ws.length>1?"s":""}</div>`;
+    data.ws.forEach(w=>{
+      const b=w.wt?`<span class="wb ${w.wt==="1kg"?"w1":"w2"}">${w.wt}</span>`:"";
+      h+=`<div class="wr">
+        <div class="wi">${w.i}</div>
+        <div style="flex:1">
+          <div style="font-weight:600;font-size:.88rem;margin-bottom:2px">${w.n}${b}</div>
+          <div style="font-size:.74rem;color:#aaa;margin-bottom:6px">${w.d}</div>
+          <a class="wl" href="${w.l}" target="_blank" style="background:${p.c}">▶ Open on YouTube</a>
+        </div>
+      </div>`;
+    });
+    if(data.tp)h+=`<div class="tip" style="background:${p.lt};border:1px solid ${p.c}33"><strong style="color:${p.c}">💡 Tip: </strong>${data.tp}</div>`;
+  }
+  const bc=isDone?"um":"mk",bt=isDone?"↩ Mark as not done":`✓ Mark Day ${cd} as done`;
+  h+=`<button class="btn-done ${bc}" onclick="tog('${ds}')">${bt}</button></div>`;
+  return h;
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────
+function sel2(ds){S.sd=pd(ds);render();setTimeout(()=>{const el=document.querySelector(".dc");if(el)el.scrollIntoView({behavior:"smooth",block:"start"})},50)}
+function tog(ds){S.dn.has(ds)?S.dn.delete(ds):S.dn.add(ds);lss(ST.DN,[...S.dn]);rsk();lss(ST.SK,S.sk);render()}
+function updateEx(){const v=document.getElementById("exUp").value;if(!v)return;S.ex=v;lss(ST.EX,v);render()}
+function nc(){
+  if(!confirm("Start a new cycle? Your history will be saved."))return;
+  const hi=ls(ST.HI,[]);
+  hi.push({cs:S.cs,ex:S.ex,dn:[...S.dn],sk:S.sk});
+  lss(ST.HI,hi);
+  S.dn=new Set();S.sd=null;S.cs=null;S.ex=null;
+  lss(ST.DN,[]);lss(ST.CS,null);lss(ST.EX,null);
+  render();
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
